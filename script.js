@@ -1,5 +1,5 @@
 async function updateList() {
-    let data = await fetch('http://localhost:3000/');
+    let data = await fetch('https://to-do-w84r.onrender.com/');
     let res = await data.json();
     console.log(res);
 
@@ -17,7 +17,7 @@ async function updateList() {
 
 async function clicked() {
     let li = document.createElement("li");
-    await fetch('http://localhost:3000/',{
+    await fetch('https://to-do-w84r.onrender.com/',{
         method: 'POST',
         body: JSON.stringify(document.getElementById("lable").value)
     });
