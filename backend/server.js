@@ -1,6 +1,12 @@
 const http = require('http');
+const mongos = require('mongoose');
 
-let db = [];
+
+mongos.connect("mongodb+srv://admin:admin@cluster0.kehxplj.mongodb.net/?appName=Cluster0");
+
+const todoSchema = new mongos.Schema({todoText: String});
+
+const todoModel = new mongos.model("todoModel",todoSchema);
 
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -8,16 +14,18 @@ const server = http.createServer((req, res) => {
   let body = '';
   
   req.on('data', (chunk) => {
-    body += JSON.parse(chunk);
+    body += chunk;
   });
-  req.on('end', () => {
+  
+  req.on('end', async () => {
     if (req.method === 'POST') {
       console.log('Received data:', body);
-      db.push(body);
+      await new  todoModel(JSON.parse(body)).save();
       res.end('Data received\n');
     }
     if (req.method === 'GET' ) {
-      res.end(JSON.stringify(db));
+      const getTodos = await todoModel.find();
+      res.end(JSON.stringify(getTodos));
     }
   });
   

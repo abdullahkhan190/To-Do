@@ -7,19 +7,16 @@ async function updateList() {
 
     for (let i = 0; i < res.length; i++) {
         let newLi = document.createElement("li");
-        newLi.innerText = res[i];
+        newLi.innerText = res[i].todoText;
         document.getElementById("list").appendChild(newLi);
     }
 }
-
-
-
 
 async function clicked() {
     let li = document.createElement("li");
     await fetch('https://to-do-w84r.onrender.com/',{
         method: 'POST',
-        body: JSON.stringify(document.getElementById("lable").value)
+        body: JSON.stringify({todoText : document.getElementById("lable").value})
     });
 
     updateList();
