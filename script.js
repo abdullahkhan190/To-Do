@@ -7,7 +7,11 @@ async function updateList() {
 
     for (let i = 0; i < res.length; i++) {
         let newLi = document.createElement("li");
-        newLi.innerText = res[i].todoText;
+        newLi.innerHTML = `<div>
+        ${res[i].todoText}
+        <img class = "icon" src = "./img/delete.jpg">
+        <img class = "icon" src = "./img/edit.jpg">
+        </div>` ;
         document.getElementById("list").appendChild(newLi);
     }
 }
