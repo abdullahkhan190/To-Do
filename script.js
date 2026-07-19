@@ -1,5 +1,13 @@
+async function deleteItem(id) {
+    console.log("deleted");
+    await fetch(`https://to-do-w84r.onrender.com/${id}`,{
+        method: 'DELETE'
+    });
+    updateList();
+}
+
 async function updateList() {
-    let data = await fetch('https://to-do-w84r.onrender.com/');
+    let data = await fetch('https://to-do-w84r.onrender.com');
     let res = await data.json();
     console.log(res);
 
@@ -9,7 +17,7 @@ async function updateList() {
         let newLi = document.createElement("li");
         newLi.innerHTML = `<div>
         ${res[i].todoText}
-        <img class = "icon" src = "./img/delete.jpg">
+        <button id = "deleteButton" onclick = "deleteItem('${res[i]._id}')"><img class = "icon" src = "./img/delete.jpg"></button>
         <img class = "icon" src = "./img/edit.jpg">
         </div>` ;
         document.getElementById("list").appendChild(newLi);
@@ -18,16 +26,12 @@ async function updateList() {
 
 async function clicked() {
     let li = document.createElement("li");
-    await fetch('https://to-do-w84r.onrender.com/',{
+    await fetch('https://to-do-w84r.onrender.com',{
         method: 'POST',
         body: JSON.stringify({todoText : document.getElementById("lable").value})
     });
 
     updateList();
-
-    // li.innerText = data;
-    // document.getElementById("list").appendChild(li);
-    // console.log(data);
 
 }
 

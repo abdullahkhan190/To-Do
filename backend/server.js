@@ -18,6 +18,14 @@ const server = http.createServer((req, res) => {
   });
   
   req.on('end', async () => {
+    if (req.method === "OPTIONS") {
+    res.writeHead(204, {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+    });
+    return res.end();
+    }
     if (req.method === 'POST') {
       console.log('Received data:', body);
       await new  todoModel(JSON.parse(body)).save();
@@ -27,6 +35,13 @@ const server = http.createServer((req, res) => {
       const getTodos = await todoModel.find();
       res.end(JSON.stringify(getTodos));
     }
+    if (req.method === 'DELETE') {
+      console.log(req.url.split('/')[1]);
+      const deletedItem = await todoModel.findByIdAndDelete(req.url.split('/')[1])
+      console.log("deleted ",deletedItem);
+      res.end(JSON.stringify(deletedItem));
+    }
+
   });
   
 });
