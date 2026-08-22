@@ -2,7 +2,7 @@ const http = require('http');
 const mongos = require('mongoose');
 
 
-mongos.connect("mongodb+srv://admin:admin@cluster0.kehxplj.mongodb.net/?appName=Cluster0");
+mongos.connect(process.env.MONGODB_URI);
 
 const todoSchema = new mongos.Schema({ todoText: String });
 
