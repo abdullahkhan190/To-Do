@@ -3,26 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>To-Do List</title>
     <style>
         .icon {
             width: 20px;
             height: 20px;
             margin-top: 10px;
-            
         }
     </style>
 </head>
 <body>
-    <h1>To-Do list</h1>
-    <input type="text" id="lable">
-    <button id="plus" onclick="clicked()">+</button>
-    <ul id="list">
-        <!-- <li>A</li>
-        <li>B</li>
-        <li>C</li> -->
-    </ul>
+
+    <!-- Login / Register form — hidden after login -->
+    <div id="auth-section">
+        <h1>To-Do List</h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Log In</button>
+        <button onclick="register()">Register</button>
+        <p id="auth-msg"></p>
+    </div>
+
+    <!-- Todo app — hidden until logged in -->
+    <div id="todo-section" style="display:none">
+        <h1>To-Do List</h1>
+        <span id="welcome"></span>
+        <button onclick="logout()">Log out</button>
+        <br><br>
+        <input type="text" id="lable">
+        <button id="plus" onclick="clicked()">+</button>
+        <ul id="list"></ul>
+    </div>
+
 </body>
-<script src="script.js">
-</script>
+<script src="script.js"></script>
 </html>
