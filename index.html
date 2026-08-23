@@ -5,10 +5,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            padding: 20px;
+        }
+
+        /* ── shared card ── */
+        #auth-section, #todo-section {
+            background: white;
+            border-radius: 16px;
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #2d2d2d;
+            margin-bottom: 6px;
+        }
+
+        /* ── auth section ── */
+        #auth-section p.tagline {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        #auth-section input {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        #auth-section input:focus { border-color: #667eea; }
+
+        .btn-row { display: flex; gap: 10px; margin-top: 4px; }
+
+        #auth-section button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        #auth-section button:first-of-type {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        #auth-section button:last-of-type {
+            background: #f0f0f0;
+            color: #555;
+        }
+        #auth-section button:hover { opacity: 0.85; }
+
+        #auth-msg {
+            margin-top: 14px;
+            font-size: 13px;
+            color: #e53e3e;
+            min-height: 18px;
+            text-align: center;
+        }
+
+        /* ── todo section ── */
+        .todo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+
+        #welcome {
+            display: block;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 24px;
+        }
+
+        #todo-section button[onclick="logout()"] {
+            background: none;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 5px 12px;
+            font-size: 13px;
+            color: #888;
+            cursor: pointer;
+        }
+        #todo-section button[onclick="logout()"]:hover { background: #f5f5f5; }
+
+        .add-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        #lable {
+            flex: 1;
+            padding: 11px 14px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        #lable:focus { border-color: #667eea; }
+
+        #plus {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+            transition: opacity 0.2s;
+        }
+        #plus:hover { opacity: 0.85; }
+
+        #list { list-style: none; }
+
+        #list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 15px;
+            color: #333;
+            gap: 8px;
+        }
+        #list li:last-child { border-bottom: none; }
+
+        #list li div { display: flex; align-items: center; gap: 8px; width: 100%; }
+
+        #list li span { flex: 1; }
+
+        /* delete & edit icon buttons */
+        #deleteButton, #editButton {
+            background: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 7px;
+            padding: 4px 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background 0.15s;
+        }
+        #deleteButton:hover { background: #fff0f0; border-color: #fca5a5; }
+        #editButton:hover   { background: #f0f4ff; border-color: #a5b4fc; }
+
         .icon {
-            width: 20px;
-            height: 20px;
-            margin-top: 10px;
+            width: 18px;
+            height: 18px;
+            display: block;
         }
     </style>
 </head>
@@ -17,21 +183,27 @@
     <!-- Login / Register form — hidden after login -->
     <div id="auth-section">
         <h1>To-Do List</h1>
+        <p class="tagline">Sign in to see your tasks</p>
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
-        <button onclick="login()">Log In</button>
-        <button onclick="register()">Register</button>
+        <div class="btn-row">
+            <button onclick="login()">Log In</button>
+            <button onclick="register()">Register</button>
+        </div>
         <p id="auth-msg"></p>
     </div>
 
     <!-- Todo app — hidden until logged in -->
     <div id="todo-section" style="display:none">
-        <h1>To-Do List</h1>
+        <div class="todo-header">
+            <h1>To-Do List</h1>
+            <button onclick="logout()">Log out</button>
+        </div>
         <span id="welcome"></span>
-        <button onclick="logout()">Log out</button>
-        <br><br>
-        <input type="text" id="lable">
-        <button id="plus" onclick="clicked()">+</button>
+        <div class="add-row">
+            <input type="text" id="lable" placeholder="Add a new task…">
+            <button id="plus" onclick="clicked()">+</button>
+        </div>
         <ul id="list"></ul>
     </div>
 
